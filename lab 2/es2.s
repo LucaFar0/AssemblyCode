@@ -1,12 +1,10 @@
 .section .data
-	ma : .ascii "maggiore\n"
-	ma_l : .long - ma
-	
-	mi : .ascii "minore\n"
-	mi_l : .long - mi
-	
-	u : .ascii "uguale\n"
-	u_l : .long - u
+	mag:	.ascii "maggiore\n"
+	mag_l:	.long . - mag
+	min:	.ascii "minore\n"
+	min_l:	.long . - min
+	ugu: 	.ascii "uguale\n"
+	ugu_l:	.long . - ugu
 
 .section .text
 	.global _start
@@ -23,8 +21,8 @@ _start:
 maggiore:
 	movl $4, %eax
 	movl $1, %ebx
-	leal ma, %ecx
-	movl ma_l, %edx
+	leal mag, %ecx
+	movl mag_l, %edx
 	int $0x80	
 
 	jmp fine
@@ -32,8 +30,8 @@ maggiore:
 minore:
 	movl $4, %eax
 	movl $1, %ebx
-	leal mi, %ecx
-	movl mi_l, %edx
+	leal min, %ecx
+	movl min_l, %edx
 	int $0x80
 
 	jmp fine
@@ -41,9 +39,11 @@ minore:
 uguale:
 	movl $4, %eax
 	movl $1, %ebx
-	leal u, %ecx
-	movl u_l, %edx
+	leal ugu, %ecx
+	movl ugu_l, %edx
 	int $0x80
+	
+	jmp fine
 	
 fine:	
 	movl $1, %eax
