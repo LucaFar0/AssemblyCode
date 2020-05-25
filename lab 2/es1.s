@@ -19,10 +19,10 @@ _start:
 	leal n3, %ebx
 	addl %ebx, %eax
 	
-	leal %eax, somma
+	move %eax, somma
 	
 	movl $4, %eax
 	movl $1, %ebx
 	leal somma, %ecx
-	movl $4, $edx
+	movl $4, %edx
 	int $0x80
