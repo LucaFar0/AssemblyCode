@@ -1,9 +1,9 @@
 .section .data
-	n1 .long 100
-	n2 .long 33
-	n3 .long 68
+	n1 : .long 100
+	n2 : .long 33
+	n3 : .long 68
 
-	somma .long 0
+	somma : .long 0
 
 .section .text
 	.global _start
