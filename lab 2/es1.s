@@ -3,26 +3,52 @@
 	n2 : .long 33
 	n3 : .long 68
 
-	somma : .long 0
+	somma : .ascii "000\n"
+	somma_l : .long . - somma
 
 .section .text
 	.global _start
 _start:
-	leal somma, %eax
+	leal somma, %esi
 	
-	leal n1, %ebx
+	movl $0, %eax
+	
+	movl n1, %ebx
 	addl %ebx, %eax
 	
-	leal n2, %ebx
+	movl n2, %ebx
 	addl %ebx, %eax
 	
-	leal n3, %ebx
+	movl n3, %ebx
 	addl %ebx, %eax
 	
-	move %eax, somma
+	#ora eax  contiene il risultato
+	
+	movl $10, %ebx
+	divb %bl
+	addb $48, %ah
+	movb %ah, 2(%esi)
+	xorb %ah, %ah	
+
+	movl $10, %ebx
+	divb %bl
+	addb $48, %ah
+	movb %ah, 1(%esi)
+	xorb %ah, %ah	
+	
+	movl $10, %ebx
+	divb %bl
+	addb $48, %ah
+	movb %ah, (%esi)
+	xorb %ah, %ah		
 	
 	movl $4, %eax
 	movl $1, %ebx
 	leal somma, %ecx
-	movl $4, %edx
+	movl somma_l, %edx
 	int $0x80
+	
+	movl $1, %eax
+	movl $0, %ebx
+	int $0x80
+	
