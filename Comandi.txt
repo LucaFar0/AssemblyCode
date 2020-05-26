@@ -4,19 +4,19 @@ compilazione
 	./hello
 
 Stampa a monitor
-	movl $4, %eax
-	movl $1, %ebx
-	leal titolo, %ecx	# stringa in ECX
-	movl len, $edx		# caratteri da stampare in EDX
-	int $0x80
+	movl $4, %eax	      # Set system call WRITE
+	movl $1, %ebx	      # | <- standard output (video)
+	leal str, %ecx        # | <- destination
+	movl str_l, %edx      # | <- length
+	int $0x80             # Execute syscall
 
 Lettura da tastiera
-	movl $3, %eax
-	movl $1, %ebx
-	leal var, %ecx		# stringa in ECX
-	movl len, $edx		# caratteri da leggere in EDX
-	int $0x80
-
+	movl $3, %eax         # Set system call READ
+	movl $0, %ebx         # | <- keyboard
+	leal str, %ecx        # | <- destination
+	movl str_l, %edx      
+	incl %edx			  # | <- string length + 1	
+	int $0x80             # Execute syscall
 
 Exit - termino il programma
 	movl $1, %eax
