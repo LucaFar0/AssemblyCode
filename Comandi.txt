@@ -66,6 +66,15 @@ for(i = 10; i < 0; i--)
 		#ciclo
 	loop start:
 	#fine ciclo
+
+call function (call nome_funzione)
+	.type nome_funzione, @function
+		istruzione 1
+		istruzione 2
+		… …
+		istruzione n
+		ret
+
 	
 	
 	
