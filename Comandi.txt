@@ -75,6 +75,19 @@ call function (call nome_funzione)
 		istruzione n
 		ret
 
+functionC	
+
+	push $intestazioni		invio paramentri (ordine inverso se più di 1)
+	call printf
+	addl $4, %esp			porto indietro ESP	(4*numero paramentri)
+	
+	push $val					
+	push $formato	
+	call scanf				esegue scanf($formato, $val)
+	addl $8, %esp			8 = 2 parametri
+	
+	
+
 	
 	
 	

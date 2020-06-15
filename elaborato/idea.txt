@@ -1,0 +1,62 @@
+IDEA
+SbarreIN = false
+SbarreOUT = false
+if(CNTRow < 3){
+	//input type A-20
+	if(input == 'A'){
+		sector_A = input;
+	}
+	if(input == 'B'){
+		sector_B = input;
+	}
+	if(input == 'C'){
+		sector_C = input;
+	}
+	//NO Output
+	NB di default sono 0, se non settati restano a 0
+}else{
+	//input type IN-A/OUT-B
+
+	if(input == 'IN'){
+		if(input == 'A'){
+			if(sector_A_MAX < = sector_A+1){
+				sector_A++
+				SbarreIN = true
+			}
+		}
+		if(input == 'B'){
+			if(sector_B_MAX < = sector_B+1){
+				sector_B++
+				SbarreIN = true
+			}
+		}
+		if(input == 'C'){
+			if(sector_C_MAX < = sector_C+1){
+				sector_C++
+				SbarreIN = true
+			}
+		}
+	}elseif(input == 'OUT'){
+		if(input == 'A'){
+			if(sector_A_MIN >= sector_A-1){
+				sector_A++
+				SbarreOUT = true
+			}
+		}
+		if(input == 'B'){
+			if(sector_B _MIN >= sector_B-1){
+				sector_B--
+				SbarreOUT = true
+			}
+		}
+		if(input == 'C'){
+			if(sector_C_MIN >= sector_C-1){
+				sector_C--
+				SbarreOUT = true
+			}
+		}
+	}
+
+	//output type OC-19-29-07-000\n
+	//SbarraIn SparraOut - SectorA - SectorB - SectorC - A_Pieno B_Pieno C_Pieno
+}
