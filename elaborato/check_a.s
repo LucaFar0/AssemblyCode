@@ -10,13 +10,16 @@ check_a:
 	cmp $65, (%ecx)
 	je first_check
 	jmp end
+	
 first_check:
-
 	cmp $45, 1(%ecx)
 	je second_check
 	jmp end
-second_check:
 
+second_check:
 	movl $1, %eax
+	inc %ecx
+	inc %ecx
+
 end:
 	ret

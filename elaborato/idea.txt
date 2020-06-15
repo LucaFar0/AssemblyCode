@@ -3,13 +3,18 @@ SbarreIN = false
 SbarreOUT = false
 if(CNTRow < 3){
 	//input type A-20
-	if(input == 'A'){
+	if(input == 'A-'){
+		
+		input+2
+	
+		while(input != \n){
+			read input
+			input++
+		}
 		sector_A = input;
-	}
-	if(input == 'B'){
+	}else if(input == 'B'){
 		sector_B = input;
-	}
-	if(input == 'C'){
+	}else if(input == 'C'){
 		sector_C = input;
 	}
 	//NO Output
@@ -20,7 +25,8 @@ if(CNTRow < 3){
 	if(input == 'IN'){
 		if(input == 'A'){
 			if(sector_A_MAX < = sector_A+1){
-				sector_A++
+			
+	sector_A++
 				SbarreIN = true
 			}
 		}

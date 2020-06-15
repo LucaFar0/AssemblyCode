@@ -18,5 +18,7 @@ first_check:
 second_check:
 
 	movl $1, %eax
+	inc %ecx
+	inc %ecx
 end:
 	ret
