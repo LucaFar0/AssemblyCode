@@ -226,9 +226,13 @@ print:
 	movl %eax, 1(%edi)
 	
 	movb $45, 2(%edi)		# -
-		
-	movb $49, 3(%edi)
-	movb $49, 4(%edi)
+					# Print sector_A
+
+	movl sector_A, %eax
+	call itoa_2cifre								
+	movl %eax, 3(%edi)
+	movl %ebx, 4(%edi)
+	
 	movb $45, 5(%edi)		# -
 	movb $49, 6(%edi)
 	movb $49, 7(%edi)
