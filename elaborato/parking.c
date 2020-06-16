@@ -8,7 +8,7 @@
 
 /* Inserite eventuali extern modules qui */
 
-extern char * assembly_main(char in[], char out[]);
+extern char * assembly_main(char input[], char output[]);
 
 /* ************************************* */
 

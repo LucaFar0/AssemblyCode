@@ -8,7 +8,8 @@ itoa_2cifre:
 
 	# Mi salvo l'indirizzo della stringa in input, la riprendo a fine funzione
 	pushl %ecx
-
+	pushl %edi
+	
 	movl $0, %ecx			# carica il numero 0 in %ecx
 
 	cmp $10, %eax
@@ -34,5 +35,6 @@ due_cifre:
 	jmp end
 
 end:
+	popl %edi
 	popl %ecx
 	ret

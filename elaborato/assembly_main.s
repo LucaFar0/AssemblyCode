@@ -22,24 +22,27 @@
 	.type assembly_main, @function
 	
 assembly_main:
-	pushl %ebp				#Mi salvo EBP sullo stack
-	movl %esp, %ebp			#Imposto ESP = EBP
-	movl 8(%ebp), %ecx		#Strigna input in ECX
-	movl 12(%ebp), %edi		#Stringa output in EDI
+	pushl %ebp				# Mi salvo EBP sullo stack
+	movl %esp, %ebp			# Imposto ESP = EBP
+	movl 8(%ebp), %ecx		# Strigna input in ECX
+	movl 12(%ebp), %edi		# Stringa output in EDI
 	jmp start_main
 
 pre_start_main:
 	inc %ecx
+
+	cmpb $0, (%ecx)
+	je end_main
 	
 start_main:
 
-	leal sbarra_IN, %eax		#Setto sbarra a 0 = chiuso = 0+67 (C)
+	leal sbarra_IN, %eax	# Setto sbarra a 0 = chiuso = 0+67 (C)
 	movl $0, (%eax)
 	
 	leal sbarra_OUT, %eax
 	movl $0, (%eax)
 
-	movl init_status, %eax		#Prendo lo stato di init
+	movl init_status, %eax	# Prendo lo stato di init
 	cmp $3, %eax
 	jl init
 	jmp not_init
@@ -81,12 +84,9 @@ init_c:
 	inc %ecx
 
 end_init:
-	leal init_status, %eax		#Incremento lo status di init
+	leal init_status, %eax		# Incremento lo status di init
 	addl $1, (%eax)
-	
-	# if status == 3, print, poi torna qui
-	
-	
+
 	jmp next_line
 
 not_init:
@@ -98,7 +98,12 @@ not_init:
 	cmp $1, %eax
 	je output
 
-	jmp print
+canc:
+	cmpb $10, (%ecx)
+	je print
+	
+	inc %ecx
+	jmp canc
 
 input:
 	cmpb $65, (%ecx)
@@ -107,11 +112,10 @@ input:
 	cmpb $66, (%ecx)
 	je input_b
 	
-	cmpb $66, (%ecx)
+	cmpb $67, (%ecx)
 	je input_c
 	
-	inc %ecx
-	jmp print
+	jmp canc
 
 input_a:
 	inc %ecx		# Leggo A
@@ -165,11 +169,10 @@ output:
 	cmpb $66, (%ecx)
 	je output_b
 	
-	cmpb $66, (%ecx)
+	cmpb $67, (%ecx)
 	je output_c
 	
-	inc %ecx
-	jmp print
+	jmp canc
 
 output_a:	
 	inc %ecx		# Leggo A
@@ -226,19 +229,29 @@ print:
 	movl %eax, 1(%edi)
 	
 	movb $45, 2(%edi)		# -
-					# Print sector_A
 
+	# Print sector_A
 	movl sector_A, %eax
 	call itoa_2cifre								
 	movl %eax, 3(%edi)
 	movl %ebx, 4(%edi)
 	
 	movb $45, 5(%edi)		# -
-	movb $49, 6(%edi)
-	movb $49, 7(%edi)
+	
+	# Print sector_B
+	movl sector_B, %eax
+	#call itoa_2cifre								
+	movl %eax, 6(%edi)
+	movl %ebx, 7(%edi)
+	
 	movb $45, 8(%edi)		# -
-	movb $49, 9(%edi)
-	movb $49, 10(%edi)
+	
+	# Print sector_C
+	movl sector_C, %eax
+	#call itoa_2cifre								
+	movl %eax, 9(%edi)
+	movl %ebx, 10(%edi)
+	
 	movb $45, 11(%edi)		# -
 	
 	#eseguo la AND tra, il contenuto del settore e il suo massimo, sarà 1 solo se sono uguali
@@ -265,17 +278,15 @@ sec_b_light:
 	movb $49, 14(%edi)
 	
 sec_c_light:	
-	movb $10, 15(%edi)		#Scrivo il carattere \n e incremento EDI di 16 per continuare	
+	movb $10, 15(%edi)		#Scrivo il carattere \n e incremento EDI di 16 per continuare
 	addl $16, %edi
 	
 next_line:
 	cmpb $10, (%ecx)		#Controllo se il prossimo carattere è \n allora nuova riga
 	je pre_start_main
-	jmp end_main
 
 end_main:
-	inc %ecx
-	movb $0, 16(%edi)
+	movb $0, (%edi)
 	
 	movl %ebp, %esp
 	popl %ebp
