@@ -10,18 +10,23 @@ check_in:
 	cmp $73, (%ecx)
 	je first_check
 	jmp end
-first_check:
 
+first_check:
 	cmp $78, 1(%ecx)
 	je second_check
 	jmp end
-second_check:
 
+second_check:
 	cmp $45, 2(%ecx)
 	je third_check
 	jmp end
-third_check:
 
+third_check:
 	movl $1, %eax
+
 end:
+	inc %ecx
+	inc %ecx
+	inc %ecx
 	ret
+

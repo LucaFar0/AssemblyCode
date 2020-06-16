@@ -7,12 +7,12 @@ check_a:
 	# Leggo da %ecx, ritorno in eax 0 o 1 se l'input è A-
 	movl $0, %eax
 	
-	cmp $65, (%ecx)
+	cmpb $65, (%ecx)
 	je first_check
 	jmp end
 	
 first_check:
-	cmp $45, 1(%ecx)
+	cmpb $45, 1(%ecx)
 	je second_check
 	jmp end
 

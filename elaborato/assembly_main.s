@@ -14,8 +14,8 @@
 	sector_C_MAX : .int 24
 	sector_C_MIN : .int 0
 
-	sbarraIN : .int 0				#C/O	
-	sbarraOUT : .int 0				#67/79		67 + 0/12
+	sbarra_IN : .int 0				#C/O	
+	sbarra_OUT : .int 0				#67/79		67 + 0/12
 
 .section .text
 	.global assembly_main
@@ -26,8 +26,19 @@ assembly_main:
 	movl %esp, %ebp			#Imposto ESP = EBP
 	movl 8(%ebp), %ecx		#Strigna input in ECX
 	movl 12(%ebp), %edi		#Stringa output in EDI
+	jmp start_main
+
+pre_start_main:
+	inc %ecx
 	
 start_main:
+
+	leal sbarra_IN, %eax		#Setto sbarra a 0 = chiuso = 0+67 (C)
+	movl $0, (%eax)
+	
+	leal sbarra_OUT, %eax
+	movl $0, (%eax)
+
 	movl init_status, %eax		#Prendo lo stato di init
 	cmp $3, %eax
 	jl init
@@ -38,26 +49,37 @@ init:
 	cmp $1, %eax
 	je init_a
 	
-	#call check_b
-	#cmp $1, %eax
-	#je init_b
+	call check_b
+	cmp $1, %eax
+	je init_b
 	
-	#call check_c
-	#cmp $1, %eax
-	#je init_c
+	call check_c
+	cmp $1, %eax
+	je init_c
 	
 	jmp next_line
 	
 init_a:
-
+	leal sector_A, %eax
+	movl $20, (%eax)
+	inc %ecx
+	inc %ecx
+	
 	jmp end_init
 	
 init_b:
-
+	leal sector_B, %eax
+	movl $20, (%eax)
+	inc %ecx
+	inc %ecx
+	
 	jmp end_init
 	
 init_c:
-	
+	leal sector_C, %eax
+	movl $5, (%eax)	
+	inc %ecx
+
 end_init:
 	leal init_status, %eax		#Incremento lo status di init
 	addl $1, (%eax)
@@ -75,11 +97,68 @@ not_init:
 	jmp print
 
 input:
-
-
+	cmpb $65, (%ecx)
+	je input_a
+	
+	cmpb $66, (%ecx)
+	je input_b
+	
+	cmpb $66, (%ecx)
+	je input_c
+	
+	inc %ecx
 	jmp print
 
+input_a:	
+	inc %ecx		# Leggo A
+	
+	movl sector_A_MAX, %eax
+	cmp sector_A, %eax
+	je print
+	
+	leal sector_A, %eax
+	addl $1, (%eax)
+
+	leal sbarra_IN, %eax
+	movl $12, (%eax)
+	
+	jmp print
+	
+input_b:	
+	inc %ecx		# Leggo B
+		
+	movl sector_B_MAX, %eax
+	cmp sector_B, %eax
+	je print
+	
+	leal sector_B, %eax
+	addl $1, (%eax)
+
+	leal sbarra_IN, %eax
+	movl $12, (%eax)
+	
+	jmp print
+	
+input_c:		
+	inc %ecx		# Leggo C
+	
+	movl sector_C_MAX, %eax
+	cmp sector_C, %eax
+	je print
+	
+	leal sector_C, %eax
+	addl $1, (%eax)
+
+	leal sbarra_IN, %eax
+	movl $12, (%eax)
+	
+	jmp print
+	
 output:
+
+
+	
+
 
 	jmp print
 
@@ -127,11 +206,12 @@ sec_c_light:
 	addl $16, %edi
 	
 next_line:
-	cmp $10, (%ecx)	
-	jne end_main
-	jmp start_main
+	cmpb $10, (%ecx)		#Controllo se il prossimo carattere è \n allora nuova riga
+	je pre_start_main
+	jmp end_main
 
 end_main:
+	inc %ecx
 	movb $0, 16(%edi)
 	
 	movl %ebp, %esp
