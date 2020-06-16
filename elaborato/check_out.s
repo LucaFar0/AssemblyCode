@@ -28,11 +28,11 @@ third_check:
 	
 fourth_check:
 	movl $1, %eax
-
+	inc %ecx
+	inc %ecx
+	inc %ecx
+	inc %ecx
+	
 end:
-	inc %ecx
-	inc %ecx
-	inc %ecx
-	inc %ecx
 	ret
 

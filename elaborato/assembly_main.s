@@ -61,7 +61,7 @@ init:
 	
 init_a:
 	leal sector_A, %eax
-	movl $20, (%eax)
+	movl $18, (%eax)
 	inc %ecx
 	inc %ecx
 	
@@ -69,7 +69,7 @@ init_a:
 	
 init_b:
 	leal sector_B, %eax
-	movl $20, (%eax)
+	movl $29, (%eax)
 	inc %ecx
 	inc %ecx
 	
@@ -77,12 +77,16 @@ init_b:
 	
 init_c:
 	leal sector_C, %eax
-	movl $5, (%eax)	
+	movl $7, (%eax)	
 	inc %ecx
 
 end_init:
 	leal init_status, %eax		#Incremento lo status di init
 	addl $1, (%eax)
+	
+	# if status == 3, print, poi torna qui
+	
+	
 	jmp next_line
 
 not_init:
@@ -109,11 +113,11 @@ input:
 	inc %ecx
 	jmp print
 
-input_a:	
+input_a:
 	inc %ecx		# Leggo A
 	
 	movl sector_A_MAX, %eax
-	cmp sector_A, %eax
+	cmpl sector_A, %eax
 	je print
 	
 	leal sector_A, %eax
@@ -124,11 +128,11 @@ input_a:
 	
 	jmp print
 	
-input_b:	
+input_b:
 	inc %ecx		# Leggo B
 		
 	movl sector_B_MAX, %eax
-	cmp sector_B, %eax
+	cmpl sector_B, %eax
 	je print
 	
 	leal sector_B, %eax
@@ -143,7 +147,7 @@ input_c:
 	inc %ecx		# Leggo C
 	
 	movl sector_C_MAX, %eax
-	cmp sector_C, %eax
+	cmpl sector_C, %eax
 	je print
 	
 	leal sector_C, %eax
@@ -155,18 +159,74 @@ input_c:
 	jmp print
 	
 output:
-
-
+	cmpb $65, (%ecx)
+	je output_a
 	
-
-
+	cmpb $66, (%ecx)
+	je output_b
+	
+	cmpb $66, (%ecx)
+	je output_c
+	
+	inc %ecx
 	jmp print
 
+output_a:	
+	inc %ecx		# Leggo A
+	
+	movl sector_A_MIN, %eax
+	cmpl sector_A, %eax
+	je print
+	
+	leal sector_A, %eax
+	subl $1, (%eax)
+
+	leal sbarra_OUT, %eax
+	movl $12, (%eax)
+	
+	jmp print
+	
+output_b:	
+	inc %ecx		# Leggo B
+		
+	movl sector_B_MIN, %eax
+	cmpl sector_B, %eax
+	je print
+	
+	leal sector_B, %eax
+	subl $1, (%eax)
+
+	leal sbarra_OUT, %eax
+	movl $12, (%eax)
+	
+	jmp print
+	
+output_c:		
+	inc %ecx		# Leggo C
+	
+	movl sector_C_MIN, %eax
+	cmpl sector_C, %eax
+	je print
+	
+	leal sector_C, %eax
+	subl $1, (%eax)
+
+	leal sbarra_OUT, %eax
+	movl $12, (%eax)
+	
+	jmp print
+	
 print:	
 	#output type OC-19-29-07-000\n
-	movb $49, (%edi)
-	movb $49, 1(%edi)
+	movl sbarra_IN, %eax
+	addl $67, %eax
+	movl %eax, (%edi)
+	movl sbarra_OUT, %eax
+	addl $67, %eax
+	movl %eax, 1(%edi)
+	
 	movb $45, 2(%edi)		# -
+		
 	movb $49, 3(%edi)
 	movb $49, 4(%edi)
 	movb $45, 5(%edi)		# -
@@ -178,26 +238,25 @@ print:
 	movb $45, 11(%edi)		# -
 	
 	#eseguo la AND tra, il contenuto del settore e il suo massimo, sarà 1 solo se sono uguali
-	movb $48, 12(%edi)		# Scrivo 0, se il massimo e il contenuto sono uguali sovrascrivo con 1
+	# Scrivo 0, se il massimo e il contenuto sono uguali sovrascrivo con 1
+			
+	movb $48, 12(%edi)
 	movl sector_A, %eax
-	and sector_A_MAX, %eax
-	cmp $0, %eax
+	cmpl sector_A_MAX, %eax
 	jne sec_a_light
 	movb $49, 12(%edi)
 	
 sec_a_light:
 	movb $48, 13(%edi)
 	movl sector_B, %eax
-	and sector_B_MAX, %eax
-	cmp $0, %eax
+	cmpl sector_B_MAX, %eax
 	jne sec_b_light
 	movb $49, 13(%edi)
 	
 sec_b_light:
 	movb $48, 14(%edi)
 	movl sector_C, %eax
-	and sector_C_MAX, %eax
-	cmp $0, %eax
+	cmpl sector_C_MAX, %eax
 	jne sec_c_light
 	movb $49, 14(%edi)
 	
