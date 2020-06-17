@@ -233,24 +233,24 @@ print:
 	# Print sector_A
 	movl sector_A, %eax
 	call itoa_2cifre								
-	movl %eax, 3(%edi)
-	movl %ebx, 4(%edi)
+	movb %al, 3(%edi)
+	movb %ah, 4(%edi)
 	
 	movb $45, 5(%edi)		# -
 	
 	# Print sector_B
 	movl sector_B, %eax
-	#call itoa_2cifre								
-	movl %eax, 6(%edi)
-	movl %ebx, 7(%edi)
+	call itoa_2cifre								
+	movb %al, 6(%edi)
+	movb %ah, 7(%edi)
 	
 	movb $45, 8(%edi)		# -
 	
 	# Print sector_C
 	movl sector_C, %eax
-	#call itoa_2cifre								
-	movl %eax, 9(%edi)
-	movl %ebx, 10(%edi)
+	call itoa_2cifre								
+	movb %al, 9(%edi)
+	movb %ah, 10(%edi)
 	
 	movb $45, 11(%edi)		# -
 	
