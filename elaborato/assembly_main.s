@@ -64,24 +64,19 @@ init:
 	
 init_a:
 	leal sector_A, %eax
-	movl $18, (%eax)
-	inc %ecx
-	inc %ecx
+	call atoi_2cifre
 	
 	jmp end_init
 	
 init_b:
 	leal sector_B, %eax
-	movl $29, (%eax)
-	inc %ecx
-	inc %ecx
-	
+	call atoi_2cifre
+
 	jmp end_init
 	
 init_c:
 	leal sector_C, %eax
-	movl $7, (%eax)	
-	inc %ecx
+	call atoi_2cifre
 
 end_init:
 	leal init_status, %eax		# Incremento lo status di init
@@ -254,7 +249,6 @@ print:
 	
 	movb $45, 11(%edi)		# -
 	
-	#eseguo la AND tra, il contenuto del settore e il suo massimo, sarà 1 solo se sono uguali
 	# Scrivo 0, se il massimo e il contenuto sono uguali sovrascrivo con 1
 			
 	movb $48, 12(%edi)
